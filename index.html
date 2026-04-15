@@ -1,3 +1,10 @@
+1 个文件已更改
++74
+-417
+
+
+
+index.html
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -413,5 +420,79 @@
     <p>© 2026 Cassie · 持续成长中 · cassie-dev-wu.github.io</p>
   </footer>
 
+</body>
+</html>
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassie | 高端网页设计与 AI 应用</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#07111f;--panel:rgba(11,23,39,.56);--line:rgba(255,255,255,.12);--bright:rgba(166,220,255,.5);--text:#f5f7fb;--muted:#aeb8c8;--accent:#8dd8ff;--warm:#ffd8a8;--shadow:0 24px 80px rgba(0,0,0,.34);--serif:"Iowan Old Style","Palatino Linotype","Noto Serif SC","Songti SC",serif;--sans:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:radial-gradient(circle at top left,rgba(141,216,255,.14),transparent 28%),radial-gradient(circle at 85% 20%,rgba(255,216,168,.14),transparent 24%),linear-gradient(180deg,#081220 0%,#09111d 45%,#060b14 100%);min-height:100vh;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;width:34rem;height:34rem;border-radius:50%;filter:blur(90px);opacity:.24;pointer-events:none;z-index:0}body:before{top:-10rem;left:-8rem;background:#66c7ff}body:after{right:-10rem;bottom:10%;background:#f6b177}
+a{text-decoration:none;color:inherit}.shell{position:relative;z-index:1}.glass{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:var(--shadow)}
+.topbar,.hero,.section,footer{width:min(1180px,calc(100% - 40px));margin:0 auto}.topbar{position:sticky;top:18px;z-index:10;margin-top:18px;padding:14px 20px;border-radius:22px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.04em}.brand-mark{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(141,216,255,.24),rgba(255,216,168,.18));border:1px solid rgba(255,255,255,.16);font-family:var(--serif)}.nav-links{display:flex;gap:24px;list-style:none}.nav-links a{color:var(--muted);font-size:.94rem}.nav-links a:hover{color:var(--text)}
+.hero{margin-top:34px;min-height:calc(100vh - 140px);display:grid;grid-template-columns:1.08fr .92fr;gap:28px}.hero-copy,.hero-panel,.card,.project-card,.about-panel,.contact-panel{border-radius:28px;padding:32px;position:relative;overflow:hidden}.hero-copy:before,.hero-panel:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 42%);pointer-events:none}.hero-tag,.project-badge,.tag{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--accent);font-size:.84rem}.hero-tag{margin-bottom:24px}.hero-copy h1,.section-heading h2,.quote,.card-title,.project-copy h3,.about-copy h3,.contact-panel h3,.metric-value{font-family:var(--serif);font-weight:600;letter-spacing:-.03em}.hero-copy h1{font-size:clamp(3rem,6vw,5.6rem);line-height:.96;max-width:8ch;margin-bottom:22px}.hero-copy h1 span{color:var(--warm)}.hero-copy p,.section-heading p,.card p,.project-copy p,.about-copy p,.contact-panel p,.mini-panel span{color:var(--muted);line-height:1.8}.hero-actions,.contact-actions,.project-tags,.about-tags{display:flex;flex-wrap:wrap;gap:12px}.hero-actions{margin:30px 0 36px}.btn,.contact-link{min-height:48px;padding:0 22px;border-radius:999px;border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;transition:.25s}.btn:hover,.contact-link:hover,.card:hover,.project-card:hover,.about-panel:hover,.contact-panel:hover,.mini-panel:hover{transform:translateY(-3px)}.btn-primary{background:linear-gradient(135deg,#90d9ff,#f4c998);color:#07111f;font-weight:600}.btn-secondary,.contact-link{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.03);color:var(--text)}.hero-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric,.stat{padding:18px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}.metric-label,.stat span{color:var(--muted);font-size:.9rem;line-height:1.6}
+.hero-panel{display:grid;gap:16px;align-content:start}.quote{font-size:clamp(1.55rem,3vw,2.5rem);line-height:1.18;margin:8px 0 14px}.mini-panel{padding:22px;border-radius:22px}.mini-panel strong{display:block;margin-bottom:8px}.section{padding:92px 0}.eyebrow{color:var(--accent);font-size:.8rem;letter-spacing:.24em;text-transform:uppercase;margin-bottom:16px}.section-heading{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:end;margin-bottom:42px}.section-heading h2{font-size:clamp(2rem,4vw,3.5rem);line-height:1.05}
+.services-grid,.project-grid,.about-layout{display:grid;gap:20px}.services-grid{grid-template-columns:repeat(3,1fr)}.card,.project-card,.about-panel,.contact-panel,.mini-panel{transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease}.card:after,.project-card:after,.about-panel:after,.contact-panel:after,.mini-panel:after{content:"";position:absolute;inset:0;border:1px solid transparent;border-radius:inherit;pointer-events:none;transition:.28s}.card:hover:after,.project-card:hover:after,.about-panel:hover:after,.contact-panel:hover:after,.mini-panel:hover:after{border-color:var(--bright);box-shadow:inset 0 0 0 1px rgba(141,216,255,.2)}.card{min-height:280px}.card.featured{transform:translateY(-22px);min-height:340px;background:rgba(13,27,45,.78)}.card-index{color:rgba(255,255,255,.42);font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}.card-title{font-size:1.35rem;margin-bottom:14px}.card-list{list-style:none;margin-top:22px;display:grid;gap:12px;color:var(--muted);font-size:.92rem}.card-list li:before{content:"· ";color:var(--accent)}.project-grid{grid-template-columns:repeat(2,1fr)}.project-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.project-mark{width:54px;height:54px;border-radius:18px;background:linear-gradient(135deg,rgba(141,216,255,.22),rgba(255,216,168,.18));border:1px solid rgba(255,255,255,.12);display:grid;place-items:center;font-family:var(--serif)}.project-copy h3{font-size:1.55rem;margin-bottom:12px}.project-tags span,.about-tags span{padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--muted);font-size:.84rem}.about-layout{grid-template-columns:1.1fr .9fr}.about-copy h3,.contact-panel h3{font-size:1.8rem;margin-bottom:16px}.about-copy p{margin-bottom:12px}.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}.stat strong{display:block;font-family:var(--serif);font-size:1.75rem;margin-bottom:6px}.contact-panel{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}footer{padding:0 0 36px;color:rgba(255,255,255,.44);font-size:.84rem}.fade-up{opacity:0;transform:translateY(28px);animation:fadeUp .8s ease forwards}.delay-1{animation-delay:.08s}.delay-2{animation-delay:.16s}.delay-3{animation-delay:.24s}@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+@media (max-width:980px){.hero,.section-heading,.services-grid,.project-grid,.about-layout,.contact-panel{grid-template-columns:1fr}.card.featured{transform:none;min-height:300px}.contact-actions{justify-content:flex-start}}
+@media (max-width:760px){.topbar{top:10px;padding:14px 16px}.nav-links{display:none}.hero{min-height:auto}.hero-copy,.hero-panel,.card,.project-card,.about-panel,.contact-panel{padding:24px}.hero-metrics,.about-stats{grid-template-columns:1fr}.section{padding:72px 0}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav class="topbar glass fade-up">
+<a class="brand" href="#top"><span class="brand-mark">C</span><span>Cassie Studio</span></a>
+<ul class="nav-links"><li><a href="#services">服务</a></li><li><a href="#projects">案例</a></li><li><a href="#about">优势</a></li><li><a href="#contact">联系</a></li></ul>
+</nav>
+<header class="hero" id="top">
+<section class="hero-copy glass fade-up delay-1">
+<div class="hero-tag">客户需求优先 / 客户体验驱动</div>
+<h1>把网页做成<span>值得成交</span>的产品界面</h1>
+<p>面向个人品牌、小团队与业务展示场景，提供兼具高级视觉、清晰信息结构与 AI 能力接入的网页方案。目标不是能看，而是更专业、更可信、更愿意被联系。</p>
+<div class="hero-actions"><a href="#contact" class="btn btn-primary">立即开始合作</a><a href="#projects" class="btn btn-secondary">查看项目表达</a></div>
+<div class="hero-metrics">
+<article class="metric"><div class="metric-value">01</div><div class="metric-label">客户先理解价值，再决定是否咨询。</div></article>
+<article class="metric"><div class="metric-value">02</div><div class="metric-label">视觉层级与信息节奏围绕体验设计。</div></article>
+<article class="metric"><div class="metric-value">03</div><div class="metric-label">支持 AI 工具嵌入，提高业务效率。</div></article>
+</div>
+</section>
+<aside class="hero-panel glass fade-up delay-2">
+<article class="mini-panel glass"><div class="eyebrow">Product Signal</div><p class="quote">高端感不是堆元素，而是让客户一眼知道你专业、可靠、值得信任。</p><span>页面语言、版式、交互反馈和视觉质感都服务于成交与信任，而不是单纯展示。</span></article>
+<article class="mini-panel glass"><strong>Glassmorphism</strong><span>导航、卡片与关键容器统一使用毛玻璃与半透明层，提升现代感与平台级质感。</span></article>
+<article class="mini-panel glass"><strong>Asymmetric Layout</strong><span>中间服务卡作为视觉中心被放大，形成更有记忆点的页面节奏。</span></article>
+<article class="mini-panel glass"><strong>Motion Detail</strong><span>极细边框和悬停高亮反馈，强化精密、克制、专业的界面气质。</span></article>
+</aside>
+</header>
+<section class="section" id="services">
+<div class="section-heading fade-up"><div><div class="eyebrow">Services</div><h2>服务不是堆功能，而是把客户决策路径设计清楚</h2></div><p>从视觉表达、内容组织到 AI 工具接入，页面的每一块都围绕客户是否更容易理解、信任和行动来设计。</p></div>
+<div class="services-grid">
+<article class="card glass fade-up delay-1"><div class="card-index">01 / Web Presence</div><h3 class="card-title">高质感品牌网页</h3><p>用更高级的视觉语言、清晰的结构和稳定的响应式体验，让客户在手机和桌面端都感受到专业与可信。</p><ul class="card-list"><li>首页定位与价值表达</li><li>服务展示与信任结构</li><li>响应式体验与加载观感</li></ul></article>
+<article class="card glass featured fade-up delay-2"><div class="card-index">02 / Featured</div><h3 class="card-title">AI 工具应用与业务提效</h3><p>把 ChatGPT、Claude 等 AI 能力真正落到业务流程里，不只是会用，而是变成客户看得见的效率优势和交付能力。</p><ul class="card-list"><li>AI 辅助内容生成与整理</li><li>客服话术与说明页优化</li><li>流程化提效与落地页结合</li></ul></article>
+<article class="card glass fade-up delay-3"><div class="card-index">03 / Content Logic</div><h3 class="card-title">内容与转化表达</h3><p>把产品、服务和优势说得更准确，让客户更快理解重点，减少沟通成本，提升咨询意愿。</p><ul class="card-list"><li>服务文案结构优化</li><li>产品亮点提炼与重组</li><li>页面节奏与行动引导</li></ul></article>
+</div>
+</section>
+<section class="section" id="projects">
+<div class="section-heading fade-up"><div><div class="eyebrow">Projects</div><h2>案例表达更像产品页面，而不是普通展示模板</h2></div><p>案例区强调结果、场景与体验感，用更接近平台产品的方式呈现服务能力，避免廉价感和模板感。</p></div>
+<div class="project-grid">
+<article class="project-card glass fade-up delay-1"><div class="project-top"><span class="project-badge">Brand Site</span><div class="project-mark">01</div></div><div class="project-copy"><h3>个人品牌官网升级</h3><p>重构首页视觉语言与信息分层，让访问者在更短时间内看清定位、服务能力与联系入口，增强专业感与转化意愿。</p></div><div class="project-tags"><span>高端视觉</span><span>响应式设计</span><span>结构优化</span></div></article>
+<article class="project-card glass fade-up delay-2"><div class="project-top"><span class="project-badge">AI Workflow</span><div class="project-mark">02</div></div><div class="project-copy"><h3>AI 辅助内容工作流</h3><p>把 AI 用于介绍文案、内容整理和业务表达，提高交付效率，同时把这份能力直接体现在页面叙事与客户沟通中。</p></div><div class="project-tags"><span>ChatGPT</span><span>Claude</span><span>Prompt Strategy</span></div></article>
+</div>
+</section>
+<section class="section" id="about">
+<div class="about-layout">
+<article class="about-panel glass fade-up"><div class="about-copy"><div class="eyebrow">About</div><h3>客户体验是第一原则</h3><p>不是为了做一个页面而做页面，而是把客户从进入页面到产生信任、理解价值、愿意联系的整个过程设计出来。</p><p>在视觉上追求克制、清晰和质感，在内容上强调专业表达，在功能上结合 AI 能力，让页面不仅好看，也真正服务业务。</p></div><div class="about-tags"><span>高端单页设计</span><span>客户体验优先</span><span>AI 应用整合</span><span>信息架构优化</span></div></article>
+<article class="about-panel glass fade-up delay-1"><div class="eyebrow">Why It Works</div><div class="about-stats"><div class="stat"><strong>清晰</strong><span>首屏先讲价值，减少用户理解成本。</span></div><div class="stat"><strong>高级</strong><span>毛玻璃、衬线标题、精细边框建立品质感。</span></div><div class="stat"><strong>聚焦</strong><span>服务卡片有主次，视觉中心更明确。</span></div><div class="stat"><strong>专业</strong><span>文案表达克制，避免无效堆砌。</span></div></div></article>
+</div>
+</section>
+<section class="section" id="contact">
+<article class="contact-panel glass fade-up"><div><div class="eyebrow">Contact</div><h3>如果你要的是更像平台级产品的网页表达，可以直接联系</h3><p>适合个人品牌主页、服务介绍页、工作室展示页，以及需要结合 AI 能力强化效率与专业感的业务页面。</p></div><div class="contact-actions"><a class="contact-link" href="mailto:1932966181@qq.com">邮箱联系</a><a class="contact-link" href="https://cassie-dev-wu.github.io" target="_blank" rel="noreferrer">查看线上站点</a></div></article>
+</section>
+<footer><p>© 2026 Cassie Studio. Built for clarity, trust and client experience.</p></footer>
+</div>
 </body>
 </html>
