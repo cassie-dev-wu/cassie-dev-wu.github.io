@@ -1,658 +1,536 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Cassie Studio</title>
-  <meta name="description" content="高质感网站设计与 AI 内容支持">
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    :root{
-      --bg:#f3f4ef;
-      --card:rgba(255,255,255,.76);
-      --line:rgba(17,23,21,.08);
-      --text:#101514;
-      --muted:#66716d;
-      --green:#00a885;
-      --green2:#007a61;
-      --radius:28px;
-      --serif:"Iowan Old Style","Palatino Linotype","Noto Serif SC","Songti SC",serif;
-      --sans:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif
-    }
-    body{
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(circle at 12% 10%,rgba(0,168,133,.14),transparent 22%),
-        linear-gradient(180deg,#f7f8f4 0%,#edf1ea 45%,#e4e9e2 100%);
-      min-height:100vh;
-      overflow-x:hidden
-    }
-    body:before,body:after{
-      content:"";
-      position:fixed;
-      width:28rem;
-      height:28rem;
-      border-radius:50%;
-      filter:blur(90px);
-      opacity:.16;
-      pointer-events:none;
-      z-index:0
-    }
-    body:before{top:-10rem;left:-8rem;background:#00a885}
-    body:after{right:-10rem;bottom:8%;background:#111715}
-    a{text-decoration:none;color:inherit}
-    button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
-    .shell{position:relative;z-index:1}
-    .wrap,footer{width:min(1180px,calc(100% - 40px));margin:0 auto}
-    .glass{
-      background:var(--card);
-      backdrop-filter:blur(16px);
-      -webkit-backdrop-filter:blur(16px);
-      border:1px solid rgba(255,255,255,.68);
-      box-shadow:0 24px 70px rgba(17,23,21,.08)
-    }
-    .top{
-      position:sticky;
-      top:18px;
-      z-index:20;
-      margin-top:18px;
-      padding:14px 18px;
-      border-radius:22px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between
-    }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
-    .mark{
-      width:38px;
-      height:38px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,rgba(0,168,133,.18),#fff);
-      border:1px solid rgba(0,168,133,.18);
-      font-family:var(--serif)
-    }
-    nav{display:flex;gap:24px}
-    nav a{font-size:.94rem;color:var(--muted)}
-    nav a:hover{color:var(--text)}
-    .hero{
-      width:min(1180px,calc(100% - 40px));
-      margin:26px auto 0;
-      display:grid;
-      grid-template-columns:1.08fr .92fr;
-      gap:22px;
-      min-height:calc(100vh - 140px)
-    }
-    .main,.side,.panel,.card,.contact{
-      position:relative;
-      overflow:hidden;
-      border-radius:var(--radius)
-    }
-    .main,.side,.contact{padding:clamp(26px,4vw,44px)}
-    .main:before,.side:before,.contact:before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 40%);
-      pointer-events:none
-    }
-    .pill,.cap-tab{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:46px;
-      padding:0 18px;
-      border-radius:999px
-    }
-    .pill{
-      min-height:auto;
-      padding:8px 14px;
-      background:rgba(0,168,133,.08);
-      border:1px solid rgba(0,168,133,.16);
-      color:var(--green2);
-      font-size:.84rem;
-      margin-bottom:22px
-    }
-    .main h1,.side h2,.heading h2,.cap-copy h3,.card h3,.about h3,.contact h3{
-      font-family:var(--serif);
-      font-weight:600;
-      letter-spacing:-.03em
-    }
-    .main h1{
-      font-size:clamp(3.4rem,6vw,6.1rem);
-      line-height:.92;
-      max-width:8ch;
-      margin-bottom:18px
-    }
-    .main h1 span{color:var(--green2)}
-    .main p,.side p,.heading p,.cap-copy p,.card p,.about p,.contact p,.list li{
-      color:var(--muted);
-      line-height:1.84
-    }
-    .row,.chips,.tabs{display:flex;flex-wrap:wrap;gap:12px}
-    .row{margin:30px 0 34px}
-    .btn,.cap-tab,.contact a{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:50px;
-      padding:0 22px;
-      border-radius:999px;
-      transition:.24s
-    }
-    .btn:hover,.cap-tab:hover,.card:hover,.panel:hover,.contact a:hover{transform:translateY(-3px)}
-    .btn.primary{background:var(--green);color:#fff;font-weight:700}
-    .btn.secondary,.cap-tab,.contact a{background:rgba(255,255,255,.5);border:1px solid rgba(17,23,21,.1)}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .stat{
-      padding:18px;
-      border-radius:18px;
-      background:rgba(255,255,255,.52);
-      border:1px solid rgba(17,23,21,.08)
-    }
-    .stat strong{
-      display:block;
-      font-family:var(--serif);
-      font-size:1.5rem;
-      margin-bottom:6px
-    }
-    .stat span{display:block;color:var(--muted);font-size:.9rem;line-height:1.6}
-    .side{display:grid;gap:16px;align-content:start}
-    .doc{
-      padding:22px;
-      border-radius:24px;
-      background:rgba(255,255,255,.74);
-      border:1px solid rgba(17,23,21,.08)
-    }
-    .eyebrow{
-      color:var(--green2);
-      font-size:.8rem;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      margin-bottom:14px
-    }
-    .side h2{
-      font-size:clamp(1.8rem,3vw,2.7rem);
-      line-height:1.14;
-      margin-bottom:10px
-    }
-    .window{
-      margin-top:8px;
-      border-radius:22px;
-      overflow:hidden;
-      border:1px solid rgba(17,23,21,.08);
-      background:#fbfcf9
-    }
-    .wtop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:14px 18px;
-      border-bottom:1px solid rgba(17,23,21,.08);
-      font-size:.92rem
-    }
-    .dots{display:flex;gap:6px}
-    .dots span{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:rgba(17,23,21,.16)
-    }
-    .wbody{padding:18px;display:grid;gap:12px}
-    .wrow{
-      display:grid;
-      grid-template-columns:84px 1fr;
-      gap:16px;
-      padding-bottom:10px;
-      border-bottom:1px solid rgba(17,23,21,.08);
-      font-size:.94rem
-    }
-    .section{padding:96px 0}
-    .heading{
-      display:grid;
-      grid-template-columns:1.16fr .84fr;
-      gap:32px;
-      align-items:end;
-      margin-bottom:40px
-    }
-    .heading h2{
-      font-size:clamp(2.1rem,4vw,3.8rem);
-      line-height:1.04
-    }
-    .grid3,.grid2{display:grid;gap:20px}
-    .grid3{grid-template-columns:repeat(3,1fr)}
-    .grid2{grid-template-columns:.8fr 1.2fr}
-    .panel,.card,.about{padding:24px}
-    .panel,.card,.about{
-      background:rgba(255,255,255,.76);
-      border:1px solid rgba(255,255,255,.64)
-    }
-    .panel:after,.card:after,.about:after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border:1px solid transparent;
-      border-radius:inherit;
-      pointer-events:none;
-      transition:.28s
-    }
-    .panel:hover:after,.card:hover:after,.about:hover:after{
-      border-color:rgba(0,168,133,.35);
-      box-shadow:inset 0 0 0 1px rgba(0,168,133,.08)
-    }
-    .card strong{
-      display:block;
-      color:var(--green2);
-      font-size:.84rem;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      margin-bottom:10px
-    }
-    .card h3{font-size:1.42rem;margin-bottom:12px}
-    .chips span,.about-tags span{
-      padding:7px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.58);
-      border:1px solid rgba(17,23,21,.08);
-      color:var(--muted);
-      font-size:.84rem
-    }
-    .tabs{margin-bottom:18px}
-    .cap-tab.on{background:var(--green);color:#fff;border-color:var(--green)}
-    .cap-stage{min-height:330px}
-    .cap-box{
-      padding:24px;
-      border-radius:22px;
-      background:#fbfcf9;
-      border:1px solid rgba(17,23,21,.08)
-    }
-    .cap-label{
-      display:inline-flex;
-      padding:7px 12px;
-      border-radius:999px;
-      background:rgba(0,168,133,.1);
-      color:var(--green2);
-      font-size:.82rem;
-      margin-bottom:16px
-    }
-    .cap-copy h3{font-size:1.95rem;margin-bottom:12px}
-    .list,.detail{
-      list-style:none;
-      display:grid;
-      gap:10px;
-      margin-top:16px
-    }
-    .list li:before,.detail li:before{content:"· ";color:var(--green2)}
-    .mock{display:grid;gap:10px;margin-top:18px}
-    .line{
-      height:10px;
-      border-radius:999px;
-      background:linear-gradient(90deg,rgba(0,168,132,.18),rgba(17,23,21,.08))
-    }
-    .s{width:64%}.m{width:82%}.f{width:100%}
-    .about-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:20px}
-    .about h3{font-size:2rem;margin-bottom:14px}
-    .about-stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin-top:18px
-    }
-    .mini{
-      padding:18px;
-      border-radius:18px;
-      background:rgba(255,255,255,.58);
-      border:1px solid rgba(17,23,21,.08)
-    }
-    .mini strong{
-      display:block;
-      font-family:var(--serif);
-      font-size:1.5rem;
-      margin-bottom:6px
-    }
-    .mini span{color:var(--muted);font-size:.9rem;line-height:1.6}
-    .contact{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:28px;
-      align-items:center;
-      background:rgba(16,20,19,.72);
-      border:1px solid rgba(255,255,255,.12);
-      color:#f5f7f6
-    }
-    .contact p,.contact .note{color:#b5c0bc}
-    .contact h3{
-      font-size:clamp(2rem,3vw,3rem);
-      line-height:1.08;
-      margin-bottom:12px
-    }
-    .note{margin-top:16px;font-size:.92rem}
-    footer{padding:0 0 36px;color:rgba(17,23,21,.44);font-size:.84rem}
-    .fade{opacity:0;transform:translateY(28px);animation:up .82s ease forwards}
-    .d1{animation-delay:.08s}.d2{animation-delay:.16s}.d3{animation-delay:.24s}
-    @keyframes up{to{opacity:1;transform:translateY(0)}}
-    @media(max-width:1020px){
-      .hero,.heading,.grid2,.grid3,.about-grid,.contact{grid-template-columns:1fr}
-      .grid3{grid-template-columns:1fr}
-      .contact .row{justify-content:flex-start}
-    }
-    @media(max-width:760px){
-      .top{top:10px;padding:14px 16px}
-      nav{display:none}
-      .hero{min-height:auto}
-      .main,.side,.contact{padding:24px}
-      .stats,.about-stats{grid-template-columns:1fr}
-      .section{padding:72px 0}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cassie — 网页开发与AI应用</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;
+  --bg2:#f5f5f7;
+  --bg3:#1d1d1f;
+  --text:#1d1d1f;
+  --text2:#6e6e73;
+  --text3:#ffffff;
+  --accent:#0071e3;
+  --accent2:#bf4800;
+  --border:#d2d2d7;
+  --card:#ffffff;
+  --nav-bg:rgba(255,255,255,0.85);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* 导航 */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:52px;
+  background:var(--nav-bg);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;
+}
+.logo{font-size:1.2rem;font-weight:600;color:var(--text);letter-spacing:-0.3px}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:0.85rem;color:var(--text2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{
+  font-size:0.85rem;
+  background:var(--accent);
+  color:#fff;
+  padding:7px 16px;
+  border-radius:980px;
+  text-decoration:none;
+  transition:opacity .2s;
+}
+.nav-cta:hover{opacity:.85}
+
+/* 首屏 */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:100px 6% 60px;
+  background:var(--bg);
+}
+.hero-eyebrow{
+  font-size:0.9rem;
+  color:var(--accent);
+  font-weight:500;
+  letter-spacing:.5px;
+  margin-bottom:16px;
+  opacity:0;
+  animation:fadeUp .8s .2s forwards;
+}
+.hero h1{
+  font-size:clamp(2.8rem,7vw,5.5rem);
+  font-weight:700;
+  line-height:1.05;
+  letter-spacing:-2px;
+  color:var(--text);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp .8s .35s forwards;
+}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#0071e3,#34aadc);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:1.2rem;
+  color:var(--text2);
+  max-width:520px;
+  line-height:1.7;
+  margin-bottom:40px;
+  opacity:0;
+  animation:fadeUp .8s .5s forwards;
+}
+.hero-btns{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  opacity:0;
+  animation:fadeUp .8s .65s forwards;
+}
+.btn-blue{
+  background:var(--accent);color:#fff;
+  padding:14px 28px;border-radius:980px;
+  font-size:1rem;text-decoration:none;
+  transition:opacity .2s,transform .2s;
+  display:inline-block;
+}
+.btn-blue:hover{opacity:.85;transform:scale(1.02)}
+.btn-ghost{
+  background:transparent;color:var(--accent);
+  padding:14px 28px;border-radius:980px;
+  font-size:1rem;text-decoration:none;
+  transition:background .2s;
+  display:inline-block;
+}
+.btn-ghost:hover{background:#f0f6ff}
+.scroll-hint{
+  margin-top:60px;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:var(--text2);font-size:.8rem;
+  opacity:0;animation:fadeUp .8s .9s forwards;
+}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--border),transparent);
+  animation:scrollDown 1.5s 1.5s ease-in-out infinite;
+}
+
+/* 亮点数字 */
+.stats{
+  background:var(--bg3);
+  padding:70px 6%;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;
+}
+.stat-item{
+  padding:40px 30px;
+  text-align:center;
+  border-right:1px solid #2d2d2f;
+}
+.stat-item:last-child{border-right:none}
+.stat-num{
+  font-size:3rem;font-weight:700;
+  color:#fff;letter-spacing:-1px;
+  display:block;margin-bottom:6px;
+}
+.stat-num span{color:#34aadc}
+.stat-desc{font-size:.9rem;color:#86868b}
+
+/* 服务模块 */
+.services{padding:100px 6%;background:var(--bg)}
+.section-header{text-align:center;margin-bottom:60px}
+.eyebrow{font-size:.85rem;color:var(--accent);font-weight:500;letter-spacing:.5px;margin-bottom:12px}
+.section-header h2{
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:700;letter-spacing:-1px;
+  color:var(--text);margin-bottom:16px;
+}
+.section-header p{font-size:1.1rem;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.7}
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;max-width:1100px;margin:0 auto;
+}
+.service-card{
+  background:var(--bg2);
+  border-radius:20px;
+  padding:40px 36px;
+  transition:transform .3s,box-shadow .3s;
+  cursor:default;
+  position:relative;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;
+  inset:0;border-radius:20px;
+  border:1px solid transparent;
+  transition:border-color .3s;
+}
+.service-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.1)}
+.service-card:hover::before{border-color:var(--border)}
+.service-icon{
+  width:52px;height:52px;
+  background:var(--bg);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;
+  font-size:24px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.service-card h3{font-size:1.2rem;font-weight:600;margin-bottom:12px;letter-spacing:-.3px}
+.service-card p{font-size:.95rem;color:var(--text2);line-height:1.7}
+.service-tag{
+  display:inline-block;
+  margin-top:20px;
+  font-size:.8rem;
+  color:var(--accent);
+  background:#e8f1fb;
+  padding:4px 12px;border-radius:980px;
+}
+
+/* 作品展示 */
+.work{padding:100px 6%;background:var(--bg2)}
+.work-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;max-width:1100px;margin:0 auto;
+}
+.work-card{
+  background:var(--card);
+  border-radius:20px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:transform .3s,box-shadow .3s;
+}
+.work-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+.work-preview{
+  height:220px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.work-preview.p1{background:linear-gradient(135deg,#e8f4fd,#c8e6f9)}
+.work-preview.p2{background:linear-gradient(135deg,#f0f9ec,#d4edca)}
+.work-preview.p3{background:linear-gradient(135deg,#fdf3e8,#fae1c0)}
+.work-preview.p4{background:linear-gradient(135deg,#f3eeff,#e0d0fc)}
+.work-info{padding:28px}
+.work-info h3{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.work-info p{font-size:.9rem;color:var(--text2);line-height:1.6;margin-bottom:16px}
+.work-tags{display:flex;gap:8px;flex-wrap:wrap}
+.wtag{
+  font-size:.78rem;color:var(--text2);
+  background:var(--bg2);
+  padding:4px 10px;border-radius:6px;
+  border:1px solid var(--border);
+}
+
+/* 关于我 */
+.about{
+  padding:100px 6%;background:var(--bg);
+  max-width:1100px;margin:0 auto;
+}
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-left h2{
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:700;letter-spacing:-1px;
+  margin-bottom:24px;line-height:1.1;
+}
+.about-left p{
+  font-size:1rem;color:var(--text2);
+  line-height:1.8;margin-bottom:16px;
+}
+.skill-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.skill{
+  font-size:.85rem;
+  border:1px solid var(--border);
+  padding:6px 16px;border-radius:980px;
+  color:var(--text2);
+  transition:all .2s;
+}
+.skill:hover{border-color:var(--accent);color:var(--accent)}
+.about-right{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.about-card{
+  background:var(--bg2);
+  border-radius:16px;padding:28px 22px;
+}
+.about-card-num{
+  font-size:2.2rem;font-weight:700;
+  color:var(--text);letter-spacing:-1px;
+  margin-bottom:4px;
+}
+.about-card-num small{font-size:1rem;color:var(--text2);font-weight:400}
+.about-card p{font-size:.85rem;color:var(--text2);line-height:1.5}
+
+/* 联系 */
+.contact{
+  background:var(--bg3);
+  padding:120px 6%;
+  text-align:center;
+}
+.contact h2{
+  font-size:clamp(2.2rem,5vw,4rem);
+  font-weight:700;letter-spacing:-1.5px;
+  color:#fff;margin-bottom:20px;line-height:1.05;
+}
+.contact p{font-size:1.1rem;color:#86868b;margin-bottom:50px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto}
+.contact-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-white{
+  background:#fff;color:var(--text);
+  padding:16px 32px;border-radius:980px;
+  font-size:1rem;font-weight:500;text-decoration:none;
+  transition:opacity .2s,transform .2s;
+  display:inline-block;
+}
+.btn-white:hover{opacity:.9;transform:scale(1.02)}
+.btn-outline-white{
+  background:transparent;color:#fff;
+  padding:16px 32px;border-radius:980px;
+  font-size:1rem;border:1px solid rgba(255,255,255,.3);
+  text-decoration:none;transition:background .2s;
+  display:inline-block;
+}
+.btn-outline-white:hover{background:rgba(255,255,255,.1)}
+
+/* footer */
+footer{
+  background:var(--bg3);
+  border-top:1px solid #2d2d2f;
+  padding:30px 6%;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+footer p{font-size:.85rem;color:#86868b}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:.85rem;color:#86868b;text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:#fff}
+
+/* 动画 */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes scrollDown{
+  0%,100%{transform:scaleY(1);transform-origin:top}
+  50%{transform:scaleY(1.5);transform-origin:top}
+}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+
+/* 响应式 */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .work-grid{grid-template-columns:1fr}
+  .about-layout{grid-template-columns:1fr;gap:40px}
+  .stat-item{border-right:none;border-bottom:1px solid #2d2d2f}
+  .stat-item:last-child{border-bottom:none}
+}
+</style>
 </head>
 <body>
-  <div class="shell">
-    <div class="top glass wrap fade">
-      <a class="brand" href="#top">
-        <span class="mark">C</span>
-        <span>Cassie Studio</span>
-      </a>
-      <nav>
-        <a href="#services">服务</a>
-        <a href="#capabilities">AI 能力</a>
-        <a href="#projects">案例</a>
-        <a href="#contact">联系</a>
-      </nav>
-    </div>
 
-    <header class="hero" id="top">
-      <section class="main glass fade d1">
-        <div class="pill">高端展示 / 专业表达 / AI 输出</div>
-        <h1>把一个网站做成真正值得被看到的页面</h1>
-        <p>这不是说明书，也不是简历式网页，而是一套更适合正式对外展示的品牌页面方案。重点在于把视觉、内容和结构整理得更完整，让页面本身更有说服力。</p>
-        <div class="row">
-          <a class="btn primary" href="#contact">开始合作</a>
-          <a class="btn secondary" href="#capabilities">查看 AI 能力</a>
-        </div>
-        <div class="stats">
-          <article class="stat">
-            <strong>高级</strong>
-            <span>黑白基底加马石油绿点睛，整体更克制耐看。</span>
-          </article>
-          <article class="stat">
-            <strong>清楚</strong>
-            <span>不再堆信息，页面更像成品而不是汇报稿。</span>
-          </article>
-          <article class="stat">
-            <strong>可用</strong>
-            <span>适合正式展示、承接咨询与持续更新。</span>
-          </article>
-        </div>
-      </section>
+<nav>
+  <div class="logo">Cassie.</div>
+  <ul class="nav-links">
+    <li><a href="#services">服务</a></li>
+    <li><a href="#work">作品</a></li>
+    <li><a href="#about">关于</a></li>
+    <li><a href="#contact">联系</a></li>
+  </ul>
+  <a href="mailto:1932966181@qq.com" class="nav-cta">开始合作</a>
+</nav>
 
-      <aside class="side glass fade d2">
-        <article class="doc">
-          <div class="eyebrow">Interface Reference</div>
-          <h2>更像成熟平台的界面气质，而不是卡片式 PPT。</h2>
-          <p>排版向更克制、更有留白、更重秩序的方向靠拢。弱化说教和解释，强调安静、利落、可持续使用的完成度。</p>
-        </article>
-        <div class="window">
-          <div class="wtop">
-            <div class="dots"><span></span><span></span><span></span></div>
-            <div>AI 能力样例</div>
-          </div>
-          <div class="wbody">
-            <div class="wrow"><strong>方向</strong><span>职业思路、项目规划、内容选题</span></div>
-            <div class="wrow"><strong>输出</strong><span>方案整理、文案优化、结构重写</span></div>
-            <div class="wrow"><strong>节奏</strong><span>快速整理、快速生成、快速迭代</span></div>
-          </div>
-        </div>
-      </aside>
-    </header>
-
-    <section class="section" id="services">
-      <div class="heading fade">
-        <div>
-          <div class="eyebrow">Services</div>
-          <h2>页面展示的不只是网站本身，而是整体表达能力</h2>
-        </div>
-        <p>网站、内容整理和 AI 辅助能力被统一到一个更成熟的结构里，适合用于品牌展示、服务介绍和对外沟通。</p>
-      </div>
-      <div class="grid3">
-        <article class="card glass fade d1">
-          <strong>Website</strong>
-          <h3>高质感展示页</h3>
-          <p>围绕品牌形象、视觉秩序和阅读体验整理页面，让整体气质更稳定，也更适合正式使用。</p>
-          <div class="chips">
-            <span>品牌展示</span>
-            <span>响应式</span>
-            <span>高级感</span>
-          </div>
-        </article>
-        <article class="card glass fade d2">
-          <strong>AI Support</strong>
-          <h3>AI 内容与方案辅助</h3>
-          <p>结合 AI 完成内容整理、思路发散、文案重写和结构优化，让输出更高效，也更适合持续更新。</p>
-          <div class="chips">
-            <span>文案优化</span>
-            <span>资料整理</span>
-            <span>方案生成</span>
-          </div>
-        </article>
-        <article class="card glass fade d3">
-          <strong>Expression</strong>
-          <h3>对外表达升级</h3>
-          <p>把零散信息整理成更自然、更成熟的页面表达，不再只是写很多，而是更准确地传递气质和重点。</p>
-          <div class="chips">
-            <span>结构清晰</span>
-            <span>语气克制</span>
-            <span>正式展示</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="capabilities">
-      <div class="heading fade">
-        <div>
-          <div class="eyebrow">AI Capabilities</div>
-          <h2>AI 可以参与的不只是聊天，而是实际内容与方案的输出</h2>
-        </div>
-        <p>这里不是把 AI 当噱头写上去，而是把它真正能参与的内容类型、应用场景和结果形式清楚呈现出来。</p>
-      </div>
-      <div class="grid2">
-        <article class="panel glass fade d1">
-          <div class="eyebrow">Functions</div>
-          <div class="tabs">
-            <button class="cap-tab on" data-target="career">职业与方向</button>
-            <button class="cap-tab" data-target="content">内容策划</button>
-            <button class="cap-tab" data-target="brand">品牌表达</button>
-            <button class="cap-tab" data-target="research">资料整理</button>
-          </div>
-          <ul class="list">
-            <li>更适合展示真实可用的 AI 输出，而不是空泛描述。</li>
-            <li>可用于职业思路、项目规划、内容方向和文案整理。</li>
-            <li>适合在网站中作为能力展示模块持续扩展。</li>
-          </ul>
-        </article>
-
-        <article class="panel glass cap-stage fade d2">
-          <div class="cap-box" data-panel="career">
-            <div class="cap-label">职业与方向</div>
-            <div class="cap-copy">
-              <h3>把模糊的问题整理成更清楚的路径。</h3>
-              <p>适合职业方向梳理、阶段时间表、项目推进节奏和个人成长规划，让复杂问题先变清楚，再进入执行。</p>
-            </div>
-            <ul class="detail">
-              <li>阶段时间表</li>
-              <li>职业路径整理</li>
-              <li>项目目标拆解</li>
-            </ul>
-            <div class="mock">
-              <div class="line f"></div>
-              <div class="line m"></div>
-              <div class="line s"></div>
-            </div>
-          </div>
-
-          <div class="cap-box" data-panel="content" hidden>
-            <div class="cap-label">内容策划</div>
-            <div class="cap-copy">
-              <h3>让想法更快变成可发布的内容结构。</h3>
-              <p>适合选题整理、脚本初稿、系列内容规划、文章结构拆分与标题方向优化，提高内容产出的稳定性。</p>
-            </div>
-            <ul class="detail">
-              <li>选题规划</li>
-              <li>文章与脚本提纲</li>
-              <li>内容系列结构</li>
-            </ul>
-            <div class="mock">
-              <div class="line f"></div>
-              <div class="line f"></div>
-              <div class="line m"></div>
-            </div>
-          </div>
-
-          <div class="cap-box" data-panel="brand" hidden>
-            <div class="cap-label">品牌表达</div>
-            <div class="cap-copy">
-              <h3>把零散文字重写成更适合对外使用的表达。</h3>
-              <p>适合首页文案、服务介绍、品牌介绍、页面标题和短句优化，让整体语气更统一，更有气质。</p>
-            </div>
-            <ul class="detail">
-              <li>首页短句重写</li>
-              <li>服务介绍整理</li>
-              <li>语气统一与优化</li>
-            </ul>
-            <div class="mock">
-              <div class="line m"></div>
-              <div class="line f"></div>
-              <div class="line s"></div>
-            </div>
-          </div>
-
-          <div class="cap-box" data-panel="research" hidden>
-            <div class="cap-label">资料整理</div>
-            <div class="cap-copy">
-              <h3>把复杂信息整理成更容易阅读的结果。</h3>
-              <p>适合长资料提炼、重点归纳、要点表格化和信息摘要，让原本冗杂的内容更适合被快速理解。</p>
-            </div>
-            <ul class="detail">
-              <li>长文提炼</li>
-              <li>重点总结</li>
-              <li>结构化整理</li>
-            </ul>
-            <div class="mock">
-              <div class="line s"></div>
-              <div class="line f"></div>
-              <div class="line m"></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="heading fade">
-        <div>
-          <div class="eyebrow">Selected Work</div>
-          <h2>案例展示采用更接近成品页面的方式，而不是项目汇报方式</h2>
-        </div>
-        <p>不追求把内容塞满，而是让每一块都保留足够留白、秩序和视觉呼吸感，整体更接近成熟品牌网站的审美逻辑。</p>
-      </div>
-      <div class="grid3">
-        <article class="card glass fade d1">
-          <strong>Case 01</strong>
-          <h3>品牌展示页升级</h3>
-          <p>以清晰定位、统一视觉和简洁结构为核心，让网站从普通展示页升级为更适合正式对外使用的品牌页面。</p>
-          <div class="chips">
-            <span>白黑基底</span>
-            <span>马石油绿</span>
-            <span>更强留白</span>
-          </div>
-        </article>
-        <article class="card glass fade d2">
-          <strong>Case 02</strong>
-          <h3>AI 内容表达模块</h3>
-          <p>将 AI 输出能力整理成可交互展示区域，让页面不再只是说会用 AI，而是更具体地展示它能产出什么。</p>
-          <div class="chips">
-            <span>交互切换</span>
-            <span>能力展示</span>
-            <span>内容清晰</span>
-          </div>
-        </article>
-        <article class="card glass fade d3">
-          <strong>Case 03</strong>
-          <h3>整体表达优化</h3>
-          <p>调整语气、人称、层级和文案密度，让页面不再像介绍 PPT，而更像准备好被看见和使用的品牌官网。</p>
-          <div class="chips">
-            <span>更克制</span>
-            <span>更自然</span>
-            <span>更像官网</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="heading fade">
-        <div>
-          <div class="eyebrow">About This Site</div>
-          <h2>这一版的重点，是把网站从说明变成成品</h2>
-        </div>
-        <p>减少说明感，减少教人理解的语气，转而把页面当作一个正式对外使用的窗口来处理，让气质、节奏和内容自然成立。</p>
-      </div>
-      <div class="about-grid">
-        <article class="about glass fade d1">
-          <h3>为什么这次会更接近想要的方向</h3>
-          <p>颜色被压回更干净的黑白体系，用马石油绿只做重点点缀。结构压缩，减少无效卡片和说明式句子，让页面更像成熟品牌页面，而不是说明型网页。</p>
-        </article>
-        <article class="about glass fade d2">
-          <div class="about-stats">
-            <div class="mini"><strong>更少</strong><span>少一点堆砌，多一点留白与秩序。</span></div>
-            <div class="mini"><strong>更准</strong><span>文案聚焦实际能力与展示目的。</span></div>
-            <div class="mini"><strong>更稳</strong><span>长期使用也不容易显得杂乱或廉价。</span></div>
-            <div class="mini"><strong>更像官网</strong><span>整体完成度更高，适合直接对外。</span></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="contact">
-      <article class="contact glass fade">
-        <div>
-          <div class="eyebrow" style="color:#94e6cf">Contact</div>
-          <h3>如果需要一个更像成品、也更适合正式使用的网站，现在就可以开始</h3>
-          <p>适合品牌展示、服务介绍、个人工作室主页，以及希望把网站气质、内容表达与 AI 能力整理得更完整的使用场景。</p>
-          <p class="note">这一次不是换一个样式，而是把整个页面的语言、结构和完成度一起拉高。</p>
-        </div>
-        <div class="row">
-          <a class="contact-link" href="mailto:1932966181@qq.com">邮箱联系</a>
-          <a class="contact-link" href="https://cassie-dev-wu.github.io" target="_blank" rel="noreferrer">查看线上站点</a>
-        </div>
-      </article>
-    </section>
-
-    <footer>
-      <p>© 2026 Cassie Studio. Refined interface edition.</p>
-    </footer>
+<section class="hero">
+  <p class="hero-eyebrow">网页开发 · AI工具应用</p>
+  <h1>让想法<br>成为<em>真实存在</em></h1>
+  <p class="hero-sub">为个人品牌和小型团队打造有质感的线上空间，结合AI工具让每一个细节都恰到好处。</p>
+  <div class="hero-btns">
+    <a href="#work" class="btn-blue">查看作品</a>
+    <a href="#contact" class="btn-ghost">开始合作 →</a>
   </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>向下探索</span>
+  </div>
+</section>
 
-  <script>
-    const tabs = document.querySelectorAll('.cap-tab');
-    const panels = document.querySelectorAll('[data-panel]');
+<div class="stats">
+  <div class="stat-item">
+    <span class="stat-num">3<span>个月</span></span>
+    <span class="stat-desc">从零到可交付作品</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">100<span>%</span></span>
+    <span class="stat-desc">每个项目认真对待</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">AI<span>+</span></span>
+    <span class="stat-desc">融合AI提升交付效率</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">0<span>→1</span></span>
+    <span class="stat-desc">帮你建立线上第一步</span>
+  </div>
+</div>
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.target;
-        tabs.forEach(item => {
-          const on = item === tab;
-          item.classList.toggle('on', on);
-        });
-        panels.forEach(panel => {
-          panel.hidden = panel.dataset.panel !== target;
-        });
-      });
-    });
-  </script>
+<section class="services" id="services">
+  <div class="section-header reveal">
+    <p class="eyebrow">Services</p>
+    <h2>我能帮你做什么</h2>
+    <p>从想法到上线，提供完整的数字化解决方案</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🌐</div>
+      <h3>网站搭建</h3>
+      <p>为个人、小店、工作室定制展示网站。响应式设计，手机和电脑都有良好体验，交付即可上线使用。</p>
+      <span class="service-tag">展示站 · 作品集 · 落地页</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">🤖</div>
+      <h3>AI工作流搭建</h3>
+      <p>用Claude、ChatGPT等AI工具帮你建立高效的内容创作流程，减少重复劳动，把精力放在真正重要的事上。</p>
+      <span class="service-tag">内容提速 · 文案生成 · 自动化</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">✦</div>
+      <h3>品牌内容</h3>
+      <p>结合AI能力协助撰写品牌介绍、产品文案、社交媒体内容，让你的表达更清晰，更有感染力。</p>
+      <span class="service-tag">文案 · 小红书 · 品牌故事</span>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="section-header reveal">
+    <p class="eyebrow">Work</p>
+    <h2>近期作品</h2>
+    <p>每一个项目都是一次从零开始的探索</p>
+  </div>
+  <div class="work-grid">
+    <div class="work-card reveal">
+      <div class="work-preview p1">🌐</div>
+      <div class="work-info">
+        <h3>个人作品集网站</h3>
+        <p>从零搭建的个人品牌展示站，完整部署上线，现在你正在浏览的就是它。</p>
+        <div class="work-tags">
+          <span class="wtag">HTML</span>
+          <span class="wtag">CSS</span>
+          <span class="wtag">GitHub Pages</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-card reveal">
+      <div class="work-preview p2">🤖</div>
+      <div class="work-info">
+        <h3>AI内容创作工作流</h3>
+        <p>探索用AI工具批量生成和优化内容的完整流程，大幅提升创作效率。</p>
+        <div class="work-tags">
+          <span class="wtag">Claude</span>
+          <span class="wtag">ChatGPT</span>
+          <span class="wtag">Prompt设计</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-card reveal">
+      <div class="work-preview p3">📱</div>
+      <div class="work-info">
+        <h3>小商家展示落地页</h3>
+        <p>为本地小店设计的简洁落地页，突出产品亮点和联系方式，移动端优先。</p>
+        <div class="work-tags">
+          <span class="wtag">响应式</span>
+          <span class="wtag">落地页</span>
+          <span class="wtag">进行中</span>
+        </div>
+      </div>
+    </div>
+    <div class="work-card reveal">
+      <div class="work-preview p4">✦</div>
+      <div class="work-info">
+        <h3>更多项目持续更新</h3>
+        <p>每周都在学习和实践，新的作品陆续上线，欢迎常来看看。</p>
+        <div class="work-tags">
+          <span class="wtag">持续更新</span>
+          <span class="wtag">开放合作</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="about" id="about">
+  <div class="about-layout">
+    <div class="about-left reveal">
+      <h2>做一个<br>认真的人</h2>
+      <p>我是 Cassie，正在自学网页开发和AI工具应用。没有科班背景，但我相信踏实做事比任何头衔都更值得信任。</p>
+      <p>如果你需要一个价格合理、沟通顺畅的合作伙伴，我很乐意和你一起把想法变成真实的东西。</p>
+      <div class="skill-list">
+        <span class="skill">HTML / CSS</span>
+        <span class="skill">AI Prompting</span>
+        <span class="skill">Claude</span>
+        <span class="skill">ChatGPT</span>
+        <span class="skill">GitHub</span>
+        <span class="skill">内容创作</span>
+        <span class="skill">网站部署</span>
+      </div>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-card">
+        <div class="about-card-num">每天<small> 学习</small></div>
+        <p>保持输入，保持好奇心，持续迭代</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-num">快速<small> 交付</small></div>
+        <p>AI辅助开发，缩短从设计到上线的周期</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-num">认真<small> 沟通</small></div>
+        <p>理解你的需求，而不只是完成一个任务</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-num">合理<small> 定价</small></div>
+        <p>起步阶段，用作品换口碑，互利共赢</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="contact" id="contact">
+  <h2>有想法？<br>我们来聊聊</h2>
+  <p>无论是一个展示页面，还是一套AI工作流，都欢迎来找我聊聊可能性。</p>
+  <div class="contact-btns">
+    <a href="mailto:1932966181@qq.com" class="btn-white">发邮件给我</a>
+    <a href="https://cassie-dev-wu.github.io" target="_blank" class="btn-outline-white">查看线上网站</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Cassie · cassie-dev-wu.github.io</p>
+  <div class="footer-links">
+    <a href="#services">服务</a>
+    <a href="#work">作品</a>
+    <a href="#about">关于</a>
+    <a href="mailto:1932966181@qq.com">联系</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
