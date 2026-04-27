@@ -915,9 +915,8 @@ body::after{
 
 .proj-scene{
   flex-shrink:0;
-  /* Fixed 280px — at 1440px wide: 3×280 + 2×16 + 2×115(8vw) = 1222px < 1440 → all 3 visible */
-  /* 5 cards total: user scrolls to see 4th and 5th, all fully visible when scrolled to */
-  width:280px;
+  /* 240px：1440px宽屏下 3×240+2×16+2×115(8vw) = 1042px，露出第4张约100px，明确提示可滑动 */
+  width:240px;
   height:460px;
   perspective:1000px;
   cursor:none;
@@ -1845,13 +1844,42 @@ a:focus-visible {
 <section id="projects" class="reveal">
   <div class="projects-header">
     <div class="projects-title" data-en="SELECTED<br>PROJECTS" data-cn="精选<br>项目">SELECTED<br>PROJECTS</div>
-    <select class="sort-select" id="sort-select" onchange="sortProjects(this.value)">
-      <option value="default" data-en="SORT: DEFAULT" data-cn="排序：默认">SORT: DEFAULT</option>
-      <option value="date" data-en="BY DATE" data-cn="按日期">BY DATE</option>
-      <option value="type" data-en="BY TYPE" data-cn="按类型">BY TYPE</option>
-    </select>
+    <div style="display:flex;align-items:center;gap:12px">
+      <select class="sort-select" id="sort-select" onchange="sortProjects(this.value)">
+        <option value="default" data-en="SORT: DEFAULT" data-cn="排序：默认">SORT: DEFAULT</option>
+        <option value="date" data-en="BY DATE" data-cn="按日期">BY DATE</option>
+        <option value="type" data-en="BY TYPE" data-cn="按类型">BY TYPE</option>
+      </select>
+      <!-- 滑动箭头：仅桌面端显示 -->
+      <div id="proj-arrows" style="display:flex;gap:6px">
+        <button id="proj-prev" onclick="scrollProjects(-1)" style="
+          background:transparent;border:1px solid #222;color:#555;
+          width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+          font-size:14px;cursor:pointer;transition:all 0.2s;font-family:'Space Mono',monospace;
+        " onmouseenter="this.style.borderColor='#FF2D2D';this.style.color='#FF2D2D'"
+           onmouseleave="this.style.borderColor='#222';this.style.color='#555'">←</button>
+        <button id="proj-next" onclick="scrollProjects(1)" style="
+          background:transparent;border:1px solid #222;color:#555;
+          width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+          font-size:14px;cursor:pointer;transition:all 0.2s;font-family:'Space Mono',monospace;
+        " onmouseenter="this.style.borderColor='#FF2D2D';this.style.color='#FF2D2D'"
+           onmouseleave="this.style.borderColor='#222';this.style.color='#555'">→</button>
+        <span id="proj-counter" style="
+          font-family:'Space Mono',monospace;font-size:9px;color:#333;
+          letter-spacing:0.2em;align-self:center;min-width:36px;text-align:center;
+        ">1 / 5</span>
+      </div>
+    </div>
   </div>
-  <div class="projects-scroll" id="projects-scroll"></div>
+  <!-- 右侧渐变遮罩提示还有更多 -->
+  <div style="position:relative">
+    <div id="proj-fade-right" style="
+      position:absolute;right:0;top:0;bottom:50px;width:120px;
+      background:linear-gradient(to right,transparent,#000);
+      pointer-events:none;z-index:5;transition:opacity 0.3s;
+    "></div>
+    <div class="projects-scroll" id="projects-scroll"></div>
+  </div>
 </section>
 
 <!-- ═══ CONTACT ═══ -->
@@ -2522,6 +2550,43 @@ function sortProjects(v) {
   else if (v==='type') d.sort((a,b)=>a.type.localeCompare(b.type));
   renderProjects(d);
 }
+
+/* 项目卡左右箭头滚动 */
+function scrollProjects(dir) {
+  const sc = document.getElementById('projects-scroll');
+  if (!sc) return;
+  const cardW = sc.querySelector('.proj-scene') ? sc.querySelector('.proj-scene').offsetWidth + 16 : 256;
+  sc.scrollBy({ left: dir * cardW, behavior: 'smooth' });
+}
+
+/* 滚动时更新计数器和右侧渐变 */
+(function() {
+  function initProjScroll() {
+    const sc = document.getElementById('projects-scroll');
+    const counter = document.getElementById('proj-counter');
+    const fade = document.getElementById('proj-fade-right');
+    const arrows = document.getElementById('proj-arrows');
+    if (!sc) return;
+    // 手机端隐藏箭头
+    if (arrows && window.matchMedia('(hover:none),(max-width:768px)').matches) {
+      arrows.style.display = 'none';
+    }
+    function update() {
+      if (!sc.querySelector('.proj-scene')) return;
+      const cardW = sc.querySelector('.proj-scene').offsetWidth + 16;
+      const idx = Math.round(sc.scrollLeft / cardW) + 1;
+      const total = sc.querySelectorAll('.proj-scene').length;
+      if (counter) counter.textContent = idx + ' / ' + total;
+      // 右侧渐变：滚到底时消失
+      const atEnd = sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 20;
+      if (fade) fade.style.opacity = atEnd ? '0' : '1';
+    }
+    sc.addEventListener('scroll', update, { passive: true });
+    setTimeout(update, 200);
+  }
+  // 等 renderProjects 执行完再初始化
+  setTimeout(initProjScroll, 300);
+})();
 
 /* ══════════════════════════════════════════
    FAQ
